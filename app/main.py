@@ -16,16 +16,16 @@ def build_app() -> FastAPI:
         description=config.app_description
     )
     app.include_router(router)
-    print("💖")
+    print('💖')
 
     return app
 
 
 if __name__ == '__main__':
     uvicorn.run(
-        "main:build_app", 
-        factory=True, 
-        host=config.host, 
-        port=config.port, 
+        "main:build_app",
+        factory=True,
+        host=config.host,
+        port=config.port,
         reload=config.reload
     )

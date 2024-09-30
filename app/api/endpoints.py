@@ -4,6 +4,6 @@ from fastapi import APIRouter, Body
 router = APIRouter()
 
 
-@router.get("/")
+@router.get('/')
 async def healthcheck() -> dict[str, str]:
-    return {"status": "💖"}
+    return {'status': '💖'}
