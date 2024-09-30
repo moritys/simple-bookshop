@@ -1,7 +1,12 @@
 from sqlalchemy import Column, Integer
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, declared_attr
+from sqlalchemy.orm import declarative_base, declared_attr, sessionmaker
+
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv('.env')
 
 
 class PreBase:
@@ -13,13 +18,15 @@ class PreBase:
     id = Column(Integer, primary_key=True)
 
 
-SQLALCHEMY_DATABASE_URL = 'sqlite:///./sql_app.db'
-# SQLALCHEMY_DATABASE_URL = 'postgresql://user:password@postgresserver/db'
+# урл бд храним в енв или тут?
+# DATABASE_URL = 'sqlite:///./sql_app.db'
+DATABASE_URL = os.environ['DATABASE_URL']
+# DATABASE_URL = 'postgresql://user:password@postgresserver/db'
 
 Base = declarative_base(cls=PreBase)
 
 engine = create_async_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={'check_same_thread': False}
+    DATABASE_URL, connect_args={'check_same_thread': False}
 )
 
 AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession)
