@@ -10,13 +10,13 @@ from alembic import context
 import os
 import sys
 
-sys.path.append(
-    os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'app'))
-)
+# sys.path.append(  Шумейковский подход - так не нада
+#     os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'app'))
+# )
 
-from app.core.base import Base
 from app.core.database import DATABASE_URL
 
+from app import models
 
 
 # this is the Alembic Config object, which provides
@@ -34,7 +34,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = Base.metadata
+target_metadata = models.Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:

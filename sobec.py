@@ -1,4 +1,10 @@
 # from dataclasses import dataclass
+import sqlite3
+
+conn = sqlite3.connect('fastapi.db')
+
+# Закрываем соединение
+conn.close()
 
 
 # @dataclass
