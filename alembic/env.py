@@ -7,16 +7,12 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 
 from alembic import context
 
-import os
-import sys
-
-sys.path.append(
-    os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'app'))
-)
+# sys.path.append(  Шумейковский подход - так не нада
+#     os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'app'))
+# )
 
 from app import models
 from app.core.database import DATABASE_URL
-
 
 
 # this is the Alembic Config object, which provides
