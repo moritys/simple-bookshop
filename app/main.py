@@ -16,7 +16,7 @@ def build_app() -> FastAPI:
         description=config.app_description
     )
     app.include_router(router)
-    print('💖')
+    print("💖")
 
     return app
 

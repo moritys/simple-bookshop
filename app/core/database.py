@@ -2,11 +2,9 @@ from sqlalchemy import Column, Integer
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, declared_attr, sessionmaker
 
-import os
+from app.core.config import Config, get_config
 
-from dotenv import load_dotenv
-
-load_dotenv('.env')
+config: Config = get_config()
 
 
 class PreBase:
@@ -18,10 +16,7 @@ class PreBase:
     id = Column(Integer, primary_key=True)
 
 
-# урл бд храним в енв или тут?
-# DATABASE_URL = 'sqlite:///./sql_app.db'
-DATABASE_URL = os.environ['DATABASE_URL']
-# DATABASE_URL = 'postgresql://user:password@postgresserver/db'
+DATABASE_URL = config.db_url
 
 Base = declarative_base(cls=PreBase)
 
