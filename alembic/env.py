@@ -14,7 +14,7 @@ sys.path.append(
     os.path.realpath(os.path.join(os.path.dirname(__file__), '..', 'app'))
 )
 
-from app.core.base import Base
+from app import models
 from app.core.database import DATABASE_URL
 
 
@@ -34,7 +34,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = Base.metadata
+target_metadata = models.Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
