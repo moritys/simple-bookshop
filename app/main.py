@@ -4,6 +4,7 @@ import uvicorn
 import uvicorn.server
 
 from api.endpoints import router
+from api.book import
 from core.config import get_config, Config
 
 
