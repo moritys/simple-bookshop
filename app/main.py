@@ -3,8 +3,7 @@ from fastapi import FastAPI
 import uvicorn
 import uvicorn.server
 
-from api.endpoints import router
-from api.book import
+from api import setup_routers
 from core.config import get_config, Config
 
 
@@ -16,7 +15,7 @@ def build_app() -> FastAPI:
         title=config.app_title,
         description=config.app_description
     )
-    app.include_router(router)
+    setup_routers(app)
     print("💖")
 
     return app
