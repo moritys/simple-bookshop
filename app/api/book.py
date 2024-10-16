@@ -1,5 +1,8 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from core.database import get_async_session
 from crud.book import create_book, get_book_id_by_name
 from schemas.book import BookCreate, BookDB
 
@@ -13,12 +16,13 @@ router = APIRouter()
 )
 async def create_new_book(
     book: BookCreate,
+    session: AsyncSession = Depends(get_async_session),
 ):
-    book_id = await get_book_id_by_name(book.name)
+    book_id = await get_book_id_by_name(book.name, session)
     if book_id is not None:
         raise HTTPException(
             status_code=422,
             detail='Книга с таким именем уже существует.'
         )
-    new_book = await create_book(book)
+    new_book = await create_book(book, session)
     return new_book
