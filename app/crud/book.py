@@ -31,3 +31,11 @@ async def get_book_id_by_name(
     )
     db_book_id = db_book_id.scalars().first()
     return db_book_id
+
+
+async def read_all_books_from_db(
+    session: AsyncSession,
+) -> list[Book]:
+    book_list = await session.execute(select(Book))
+    book_list = book_list.scalars().all()
+    return book_list
