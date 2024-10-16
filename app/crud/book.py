@@ -8,7 +8,7 @@ from schemas.book import BookCreate
 
 
 async def create_book(new_book: BookCreate) -> Book:
-    new_book_data = new_book.dict()
+    new_book_data = new_book.model_dump()
 
     db_book = Book(**new_book_data)
 
