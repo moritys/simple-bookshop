@@ -5,8 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from core.database import get_async_session
 from crud.book import (
     create_book, get_book_id_by_name, read_all_books_from_db,
-    get_book_by_id, update_book,
+    get_book_by_id, update_book, delete_book
 )
+from models.book import Book
 from schemas.book import BookCreate, BookDB, BookUpdate
 
 router = APIRouter(prefix='/books', tags=['Books'])
@@ -36,13 +37,7 @@ async def partially_update_book(
     obj_in: BookUpdate,
     session: AsyncSession = Depends(get_async_session),
 ):
-    book = await get_book_by_id(book_id, session)
-
-    if book is None:
-        raise HTTPException(
-            status_code=404,
-            detail='Книга не найдена!'
-        )
+    book = await check_book_exists(book_id, session)
 
     if obj_in.name is not None:
         await check_name_duplicate(obj_in.name, session)
@@ -63,6 +58,20 @@ async def get_all_books(
     return book_list
 
 
+@router.delete(
+    '/{book_id}',
+    response_model=BookDB,
+    response_model_exclude_none=True,
+)
+async def remove_book(
+    book_id: int,
+    session: AsyncSession = Depends(get_async_session),
+):
+    book = await check_book_exists(book_id, session)
+    book = await delete_book(book, session)
+    return book
+
+
 async def check_name_duplicate(
     book_name: str,
     session: AsyncSession,
@@ -73,3 +82,18 @@ async def check_name_duplicate(
             status_code=422,
             detail='Переговорка с таким именем уже существует!',
         )
+
+
+async def check_book_exists(
+    book_id: int,
+    session: AsyncSession,
+) -> Book:
+    book = await get_book_by_id(
+        book_id, session
+    )
+    if book is None:
+        raise HTTPException(
+            status_code=404,
+            detail='Книга не найдена!'
+        )
+    return book

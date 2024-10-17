@@ -72,3 +72,12 @@ async def update_book(
     await session.commit()
     await session.refresh(db_book)
     return db_book
+
+
+async def delete_book(
+    db_book: Book,
+    session: AsyncSession,
+) -> Book:
+    await session.delete(db_book)
+    await session.commit()
+    return db_book
