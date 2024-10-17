@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 
 class BookBase(BaseModel):
@@ -10,6 +10,15 @@ class BookBase(BaseModel):
 
 class BookCreate(BookBase):
     name: str = Field(..., min_length=1, max_length=100)
+
+
+class BookUpdate(BookBase):
+
+    @field_validator('name')
+    def name_cannot_be_null(cls, value):
+        if value is None:
+            raise ValueError('Имя книги не может быть пустым!')
+        return value
 
 
 class BookDB(BookBase):
