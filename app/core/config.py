@@ -5,8 +5,10 @@ from dataclasses import dataclass
 @dataclass
 class Config:
     # эти параметры тоже можно засунуть в переменные окружения
-    app_title: str = 'Книжный магазин'
-    app_description: str = 'Описание магазина'
+    app_title: str = 'Аренда книг'
+    app_description: str = (
+        'Сервис, позволяющий взять любую книгу в аренду сроком от 1 месяца.'
+    )
     reload: bool = True
 
     host: str = os.getenv('APP_HOST', '127.0.0.1')

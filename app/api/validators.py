@@ -1,0 +1,30 @@
+from fastapi import HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from crud.book import book_crud
+from models.book import Book
+
+
+async def check_name_duplicate(
+    book_name: str,
+    session: AsyncSession,
+) -> None:
+    book_id = await book_crud.get_book_id_by_name(book_name, session)
+    if book_id is not None:
+        raise HTTPException(
+            status_code=422,
+            detail='Переговорка с таким именем уже существует!',
+        )
+
+
+async def check_book_exists(
+    book_id: int,
+    session: AsyncSession,
+) -> Book:
+    book = await book_crud.get(book_id, session)
+    if book is None:
+        raise HTTPException(
+            status_code=404,
+            detail='Книга не найдена!'
+        )
+    return book

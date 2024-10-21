@@ -1,14 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_async_session
-from crud.book import (
-    create_book, get_book_id_by_name, read_all_books_from_db,
-    get_book_by_id, update_book, delete_book
-)
-from models.book import Book
+from crud.book import book_crud
 from schemas.book import BookCreate, BookDB, BookUpdate
+from .validators import check_book_exists, check_name_duplicate
 
 router = APIRouter(prefix='/books', tags=['Books'])
 
@@ -23,7 +20,7 @@ async def create_new_book(
     session: AsyncSession = Depends(get_async_session),
 ):
     await check_name_duplicate(book.name, session)
-    new_book = await create_book(book, session)
+    new_book = await book_crud.create(book, session)
     return new_book
 
 
@@ -42,7 +39,7 @@ async def partially_update_book(
     if obj_in.name is not None:
         await check_name_duplicate(obj_in.name, session)
 
-    book = await update_book(book, obj_in, session)
+    book = await book_crud.update(book, obj_in, session)
     return book
 
 
@@ -54,7 +51,7 @@ async def partially_update_book(
 async def get_all_books(
     session: AsyncSession = Depends(get_async_session),
 ):
-    book_list = await read_all_books_from_db(session)
+    book_list = await book_crud.get_multi(session)
     return book_list
 
 
@@ -68,32 +65,5 @@ async def remove_book(
     session: AsyncSession = Depends(get_async_session),
 ):
     book = await check_book_exists(book_id, session)
-    book = await delete_book(book, session)
-    return book
-
-
-async def check_name_duplicate(
-    book_name: str,
-    session: AsyncSession,
-) -> None:
-    book_id = await get_book_id_by_name(book_name, session)
-    if book_id is not None:
-        raise HTTPException(
-            status_code=422,
-            detail='Переговорка с таким именем уже существует!',
-        )
-
-
-async def check_book_exists(
-    book_id: int,
-    session: AsyncSession,
-) -> Book:
-    book = await get_book_by_id(
-        book_id, session
-    )
-    if book is None:
-        raise HTTPException(
-            status_code=404,
-            detail='Книга не найдена!'
-        )
+    book = await book_crud.remove(book, session)
     return book
