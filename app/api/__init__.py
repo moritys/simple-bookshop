@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-from .book import router as book_router
-from .base import router as base_router
-from .reservation import router as reservation_router
+from api.endpoints.book import router as book_router
+from api.endpoints.base import router as base_router
+from api.endpoints.reservation import router as reservation_router
 
 
 def setup_routers(app: FastAPI) -> None:

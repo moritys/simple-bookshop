@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from core.database import get_async_session
 from crud.book import book_crud
 from schemas.book import BookCreate, BookDB, BookUpdate
-from .validators import check_book_exists, check_name_duplicate
+from api.validators import check_book_exists, check_name_duplicate
 
 router = APIRouter(prefix='/books', tags=['Books'])
 

@@ -2,6 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from crud.book import book_crud
+from crud.reservation import reservation_crud
 from models.book import Book
 
 
@@ -28,3 +29,14 @@ async def check_book_exists(
             detail='Книга не найдена!'
         )
     return book
+
+
+async def check_reservation_intersections(**kwargs) -> None:
+    reservations = await reservation_crud.get_reservation_at_the_same_time(
+        **kwargs
+    )
+    if reservations:
+        raise HTTPException(
+            status_code=422,
+            detail=str(reservations)
+        )
