@@ -1,11 +1,14 @@
 from datetime import date
 
-from pydantic import BaseModel, model_validator, field_validator
+from pydantic import BaseModel, model_validator, field_validator, ConfigDict
 
 
 class ReservationBase(BaseModel):
     from_reserve: date
     to_reserve: date
+
+    # запрет на передачу других полей
+    model_config = ConfigDict(extra='forbid')
 
 
 class ReservationUpdate(ReservationBase):

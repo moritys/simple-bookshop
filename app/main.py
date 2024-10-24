@@ -21,7 +21,7 @@ def build_app() -> FastAPI:
     return app
 
 
-if __name__ == '__main__':
+def run_server():
     uvicorn.run(
         "main:build_app",
         factory=True,
@@ -29,3 +29,7 @@ if __name__ == '__main__':
         port=config.port,
         reload=config.reload
     )
+
+
+if __name__ == '__main__':
+    run_server()

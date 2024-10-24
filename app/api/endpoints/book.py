@@ -4,7 +4,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_async_session
 from crud.book import book_crud
+from crud.reservation import reservation_crud
 from schemas.book import BookCreate, BookDB, BookUpdate
+from schemas.reservation import ReservationDB
 from api.validators import check_book_exists, check_name_duplicate
 
 router = APIRouter(prefix='/books', tags=['Books'])
@@ -67,3 +69,18 @@ async def remove_book(
     book = await check_book_exists(book_id, session)
     book = await book_crud.remove(book, session)
     return book
+
+
+@router.get(
+    '/{book_id}/reservations',
+    response_model=list[ReservationDB],
+)
+async def get_reservations_for_book(
+    book_id: int,
+    session: AsyncSession = Depends(get_async_session),
+):
+    await check_book_exists(book_id, session)
+    reservations = await reservation_crud.get_future_reservations_for_book(
+        book_id=book_id, session=session
+    )  # одна ошибка и ты ошибся
+    return reservations
