@@ -16,6 +16,8 @@ class Config:
 
     db_url: str = os.getenv('DATABASE_URL', 'sqlite+aiosqlite:///./fastapi.db')
 
+    secret: str = os.getenv('SECRET', 'SECRET')
+
 
 def get_config() -> Config:
     return Config()

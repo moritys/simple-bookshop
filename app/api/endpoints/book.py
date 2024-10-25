@@ -82,5 +82,5 @@ async def get_reservations_for_book(
     await check_book_exists(book_id, session)
     reservations = await reservation_crud.get_future_reservations_for_book(
         book_id=book_id, session=session
-    )  # одна ошибка и ты ошибся
+    )
     return reservations

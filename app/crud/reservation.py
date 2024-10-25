@@ -35,6 +35,7 @@ class CRUDReservation(CRUDBase):
         return reservations
 
     async def get_future_reservations_for_book(
+        self,  # <3
         book_id: int,
         session: AsyncSession,
     ) -> list[Reservation]:
