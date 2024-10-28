@@ -3,7 +3,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from core.database import get_async_session
+from core.user import current_user
 from crud.reservation import reservation_crud
+from models import User
 from schemas.reservation import (
     ReservationDB, ReservationCreate, ReservationUpdate
 )
@@ -22,12 +24,14 @@ router = APIRouter(prefix='/reservations', tags=['Reservations'])
 async def create_reservation(
     reservation: ReservationCreate,
     session: AsyncSession = Depends(get_async_session),
+    user: User = Depends(current_user),
 ):
+    print(reservation.model_dump())
     await check_book_exists(reservation.book_id, session)
     await check_reservation_intersections(
         **reservation.model_dump(), session=session
     )
-    new_reservation = await reservation_crud.create(reservation, session)
+    new_reservation = await reservation_crud.create(reservation, session, user)
     return new_reservation
 
 

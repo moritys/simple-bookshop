@@ -7,6 +7,7 @@ class Reservation(Base):
     from_reserve = Column(Date)
     to_reserve = Column(Date)
     book_id = Column(Integer, ForeignKey('book.id'))
+    user_id = Column(Integer, ForeignKey('user.id'))
 
     def __repr__(self):
         return (

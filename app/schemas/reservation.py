@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Optional
 
 from pydantic import BaseModel, model_validator, field_validator, ConfigDict
 
@@ -39,6 +40,7 @@ class ReservationCreate(ReservationUpdate):
 class ReservationDB(ReservationBase):
     id: int
     book_id: int
+    user_id: Optional[int]
 
     class Config:
         from_attributes = True
