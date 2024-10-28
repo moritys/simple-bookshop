@@ -1,5 +1,5 @@
 # from dataclasses import dataclass
-
+import sqlite3
 
 # @dataclass
 # class Person:
@@ -34,3 +34,14 @@
 
 # Test.execute_test(div, 2, 5)
 # Test.execute_test(div, 2, 0)
+
+connect = sqlite3.connect('fastapi.db')
+cur = connect.cursor()
+
+cur.execute(
+    '''
+    INSERT INTO book (name, description) values (?,?);
+    ''',
+    ('name', 'desc')
+)
+connect.commit()

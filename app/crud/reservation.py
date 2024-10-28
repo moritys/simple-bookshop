@@ -16,8 +16,8 @@ class CRUDReservation(CRUDBase):
         from_reserve: date,
         to_reserve: date,
         book_id: int,
-        reservation_id: Optional[int],
         session: AsyncSession,
+        reservation_id: Optional[int] = None,
     ) -> list[Reservation]:
         select_stmt = select(Reservation).where(
             Reservation.book_id == book_id,
@@ -25,11 +25,11 @@ class CRUDReservation(CRUDBase):
                 from_reserve <= Reservation.to_reserve,
                 to_reserve >= Reservation.from_reserve
             )
-        )  # не работает проверка пересечений, подумать (?)
-        if reservation_id is not None:
-            select_stmt = select_stmt.where(
-                Reservation.id != reservation_id
-            )
+        )
+        # if reservation_id is not None:
+        #     select_stmt = select_stmt.where(
+        #         Reservation.id != reservation_id
+        #     )
         reservations = await session.execute(select_stmt)
         reservations = reservations.scalars().all()
         return reservations
