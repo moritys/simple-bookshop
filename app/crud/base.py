@@ -33,7 +33,7 @@ class CRUDBase:
         self,
         obj_in,
         session: AsyncSession,
-        user: Optional[User],
+        user: Optional[User] = None,
     ):
         obj_in_data = obj_in.dict()
         if user is not None:
