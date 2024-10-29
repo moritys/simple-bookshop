@@ -3,8 +3,8 @@ from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from crud.base import CRUDBase
-from models.book import Book
+from app.crud.base import CRUDBase
+from app.models.book import Book
 
 
 class CRUDBook(CRUDBase):

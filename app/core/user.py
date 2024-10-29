@@ -10,10 +10,10 @@ from fastapi_users.authentication import (
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .config import get_config, Config
-from .database import get_async_session
-from models.user import User
-from schemas.user import UserCreate
+from app.core.config import get_config, Config
+from app.core.database import get_async_session
+from app.models.user import User
+from app.schemas.user import UserCreate
 
 config: Config = get_config()
 

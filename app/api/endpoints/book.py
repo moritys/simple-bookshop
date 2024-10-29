@@ -2,12 +2,12 @@ from fastapi import APIRouter, Depends
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.database import get_async_session
-from crud.book import book_crud
-from crud.reservation import reservation_crud
-from schemas.book import BookCreate, BookDB, BookUpdate
-from schemas.reservation import ReservationDB
-from api.validators import check_book_exists, check_name_duplicate
+from app.core.database import get_async_session
+from app.crud.book import book_crud
+from app.crud.reservation import reservation_crud
+from app.schemas.book import BookCreate, BookDB, BookUpdate
+from app.schemas.reservation import ReservationDB
+from app.api.validators import check_book_exists, check_name_duplicate
 
 router = APIRouter(prefix='/books', tags=['Books'])
 
