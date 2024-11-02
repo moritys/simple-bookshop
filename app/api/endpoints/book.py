@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_async_session
+from app.core.user import current_superuser
 from app.crud.book import book_crud
 from app.crud.reservation import reservation_crud
 from app.schemas.book import BookCreate, BookDB, BookUpdate
@@ -16,11 +17,13 @@ router = APIRouter(prefix='/books', tags=['Books'])
     '/',
     response_model=BookDB,
     response_model_exclude_none=True,
+    dependencies=[Depends(current_superuser)],
 )
 async def create_new_book(
     book: BookCreate,
     session: AsyncSession = Depends(get_async_session),
 ):
+    """Только для суперюзеров."""
     await check_name_duplicate(book.name, session)
     new_book = await book_crud.create(book, session)
     return new_book
@@ -30,12 +33,14 @@ async def create_new_book(
     '/{book_id}',
     response_model=BookDB,
     response_model_exclude_none=True,
+    dependencies=[Depends(current_superuser)],
 )
 async def partially_update_book(
     book_id: int,
     obj_in: BookUpdate,
     session: AsyncSession = Depends(get_async_session),
 ):
+    """Только для суперюзеров."""
     book = await check_book_exists(book_id, session)
 
     if obj_in.name is not None:
@@ -61,11 +66,13 @@ async def get_all_books(
     '/{book_id}',
     response_model=BookDB,
     response_model_exclude_none=True,
+    dependencies=[Depends(current_superuser)],
 )
 async def remove_book(
     book_id: int,
     session: AsyncSession = Depends(get_async_session),
 ):
+    """Только для суперюзеров."""
     book = await check_book_exists(book_id, session)
     book = await book_crud.remove(book, session)
     return book
@@ -74,6 +81,7 @@ async def remove_book(
 @router.get(
     '/{book_id}/reservations',
     response_model=list[ReservationDB],
+    response_model_exclude={'user_id'},
 )
 async def get_reservations_for_book(
     book_id: int,

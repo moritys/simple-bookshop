@@ -1,6 +1,10 @@
 import os
 from dataclasses import dataclass
 
+from typing import Optional
+
+from pydantic import EmailStr
+
 
 @dataclass
 class Config:
@@ -17,6 +21,9 @@ class Config:
     db_url: str = os.getenv('DATABASE_URL', 'sqlite+aiosqlite:///./fastapi.db')
 
     secret: str = os.getenv('SECRET', 'SECRET')
+
+    first_superuser_email: Optional[EmailStr] = None
+    first_superuser_password: Optional[str] = None
 
 
 def get_config() -> Config:
